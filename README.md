@@ -1,11 +1,33 @@
-# GOD Coding Agent
+<div align="center">
 
-> A safety-first, self-verifying agentic coding system. The high-value parts run
-> fully offline (no API key) — workspace boundaries, self-verification,
-> reversible changes, dependency vetting — and the agent learns from its own
-> history to improve future work.
+# ⚔️ GOD Agent
 
-[**→ Free Variant Quickstart**](QUICKSTART_FREE_VARIANT.md) · [**→ Documentation**](docs/README.md)
+### Silent. Precise. Self-verifying.
+
+**A safety-first, offline-first autonomous coding agent with a zero-dependency core — it writes code behind a guarded pipeline, verifies its own work, rolls back on failure, and learns from its own history.**
+
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg)](LICENSE)
+[![Runtime deps](https://img.shields.io/badge/runtime%20dependencies-0-8b5cf6)](pyproject.toml)
+[![Tests](https://img.shields.io/badge/tests-240%2B%20passing-16a34a)](tests/)
+[![Offline](https://img.shields.io/badge/offline-first-0ea5e9)](#)
+[![Style](https://img.shields.io/badge/writes-checkpoint%20→%20verify%20→%20rollback-dc2626)](#)
+
+[**Quickstart**](QUICKSTART_FREE_VARIANT.md) · [**Documentation**](docs/README.md) · [**Skill Memory**](docs/skills.md) · [**Changelog**](CHANGELOG.md)
+
+</div>
+
+---
+
+> **The idea:** the most valuable parts of a coding agent are the *deterministic* ones — workspace boundaries, self-verification, reversible changes, dependency vetting. Those need no model, run fully offline, and can't be "forgotten" by a prompt. The LLM is a pluggable layer on top.
+
+## ✨ Highlights
+
+- 🛡️ **Guarded writes** — every change is critiqued, checkpointed, verified against your tests, and auto-rolled-back if it fails. Bad code (secrets, vulns, syntax errors) never touches disk.
+- 🧠 **Learns from use** — detects your project's conventions, remembers past mistakes (lessons), and now reuses proven approaches (**skill memory**) — all deterministic, offline, JSONL-backed.
+- 🔌 **Any model, zero SDKs** — one stdlib HTTP adapter reaches OpenAI, Groq, OpenRouter, DeepSeek, Anthropic, Gemini, and local Ollama/LM Studio/vLLM. Cost-aware routing picks fast vs powerful per task.
+- 🔒 **Safe by construction** — path confinement, screened shell, blocked destructive commands, an append-only audit log, and one-call rollback.
+- 📴 **Offline by default** — the core has **no third-party runtime dependencies** and works with a deterministic mock provider (no API key needed).
 
 ### What's new
 
@@ -20,15 +42,11 @@
 
 ---
 
-A working implementation
-of the architecture in [`god_coding_agent_blueprint.md`](../god_coding_agent_blueprint.md),
-deliberately engineered to avoid the failure modes catalogued in
-[`claude-code-hard-realities.md`](../claude-code-hard-realities.md).
-
-The guiding idea: **the most valuable parts of a coding agent are the
-deterministic ones** — workspace boundaries, self-verification, reversible
-changes, dependency vetting. Those need no model, run fully offline, and can't
-be "forgotten" by a prompt. The LLM is a pluggable layer on top.
+GOD Agent is a working implementation of a deliberately safety-first agent
+architecture, engineered to avoid the common failure modes of autonomous coding
+tools (unbounded file access, confident-but-false "it's done" claims,
+hallucinated dependencies, and repeating the same mistakes). Every module below
+maps to a specific failure and its mitigation.
 
 ## Documentation
 
