@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "god-agent"
+version = "0.1.0"
+description = "GOD Coding Agent — a safety-first, self-verifying agentic coding system."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "GOD Agent Project" }]
+keywords = ["ai", "coding-agent", "llm", "automation", "developer-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/god-agent/god-agent"
+Documentation = "https://github.com/god-agent/god-agent/tree/main/docs"
+Repository = "https://github.com/god-agent/god-agent"
+Changelog = "https://github.com/god-agent/god-agent/blob/main/CHANGELOG.md"
+Issues = "https://github.com/god-agent/god-agent/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+# No provider SDKs are required — all LLM access uses the standard library
+# (urllib). Any OpenAI-compatible, Anthropic, or Gemini endpoint works as-is.
+
+[project.scripts]
+god = "god_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.god-agent]
+# Default runtime configuration. Overridable via god_agent.toml in a project.
+backup_dir = ".god/backups"
+checkpoint_dir = ".god/checkpoints"
+audit_log = ".god/audit.log"

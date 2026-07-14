@@ -1,0 +1,27 @@
+# GOD agent project configuration (optional).
+# Drop this at your project root to override defaults.
+[god-agent]
+# --- safety ---
+confirm_destructive = true
+max_files_per_action = 25
+
+# --- llm ---
+# provider: any preset (run `god providers` to list) — e.g. "mock" (offline,
+# default), "openai", "groq", "gemini", "anthropic", "openrouter", "ollama",
+# "lmstudio", "deepseek", "mistral", ... or "custom" with llm_base_url.
+llm_provider = "mock"
+# llm_model = "..."              # optional; uses the preset's default otherwise
+# llm_api_key_env = "..."        # optional; uses the preset's default otherwise
+# llm_base_url = "..."           # for "custom"/self-hosted or to override local
+llm_fast_model = "claude-haiku"
+llm_powerful_model = "claude-sonnet-4"
+
+# Extra headers some gateways need (e.g. OpenRouter attribution):
+# [god-agent.llm_extra_headers]
+# "HTTP-Referer" = "https://your-app.example"
+# "X-Title" = "GOD Agent"
+
+# --- verification ---
+# Leave unset to auto-detect from project markers (pyproject.toml -> pytest, etc.)
+# test_command = "pytest"
+# build_command = "python -m build"

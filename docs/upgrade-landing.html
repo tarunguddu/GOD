@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOD Agent 2026 // Shadow Upgrade</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Geist', 'system-ui', 'sans-serif'],
+                        display: ['Clash Display', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'vanta': '#050505',
+                        'obsidian': '#0A0A0A',
+                        'steel': '#18181B',
+                        'blade': '#27272A',
+                        'kunai': '#3F3F46',
+                        'smoke': '#71717A',
+                        'mist': '#A1A1AA',
+                        'crimson': '#DC2626',
+                        'blood': '#991B1B',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Plus Jakarta Sans', 'General Sans', system-ui, sans-serif; }
+        h1, h2, h3, .font-display { font-family: 'Clash Display', 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: overlay;
+        }
+        
+        /* Radial mesh gradient */
+        .mesh-gradient {
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(220, 38, 38, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+                #050505;
+        }
+        
+        /* Smooth scroll interpolation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(4rem);
+            filter: blur(8px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+        
+        /* Kunai icon animation */
+        @keyframes kunai-spin {
+            from { transform: rotate(0deg) translateX(0); }
+            to { transform: rotate(360deg) translateX(0); }
+        }
+        
+        .kunai-float {
+            animation: kunai-spin 20s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-vanta text-white mesh-gradient overflow-x-hidden">
+
+    <!-- Floating Nav (Ninja Scroll) -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
+        <div class="relative p-1.5 bg-obsidian/40 backdrop-blur-2xl rounded-full border border-white/5 shadow-[0_8px_32px_rgba(220,38,38,0.12)]">
+            <div class="px-6 py-3 bg-gradient-to-b from-steel/50 to-obsidian/50 rounded-[calc(9999px-0.375rem)] flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="text-sm font-medium tracking-tight">GOD Agent</span>
+                </div>
+                <div class="h-4 w-px bg-white/10"></div>
+                <a href="#variants" class="hidden md:block text-xs text-mist hover:text-white transition-colors duration-500">Variants</a>
+                <a href="#features" class="hidden md:block text-xs text-mist hover:text-white transition-colors duration-500">Arsenal</a>
+                <a href="#install" class="hidden md:block text-xs text-mist hover:text-white transition-colors duration-500">Deploy</a>
+                <!-- Mobile hamburger (morphs to X) -->
+                <button id="menuToggle" onclick="toggleMenu()" class="md:hidden relative w-6 h-6 flex flex-col items-center justify-center gap-1.5" aria-label="Menu">
+                    <span id="bar1" class="block w-5 h-px bg-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"></span>
+                    <span id="bar2" class="block w-5 h-px bg-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"></span>
+                </button>
+                <button class="group relative ml-2 hidden md:block">
+                    <div class="absolute inset-0 bg-crimson/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative px-4 py-1.5 bg-gradient-to-r from-crimson to-blood rounded-full text-xs font-medium flex items-center gap-2 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-95">
+                        <span>Execute</span>
+                        <div class="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center transition-all duration-700 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110">
+                            <span class="text-[10px]">→</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay (Screen-filling glass with staggered reveal) -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 backdrop-blur-3xl bg-vanta/90 opacity-0 pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden">
+        <div class="min-h-[100dvh] flex flex-col items-center justify-center gap-8 px-6">
+            <a href="#variants" onclick="toggleMenu()" class="menu-link text-4xl font-bold tracking-tighter translate-y-12 opacity-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-crimson">Variants</a>
+            <a href="#features" onclick="toggleMenu()" class="menu-link text-4xl font-bold tracking-tighter translate-y-12 opacity-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-crimson">Arsenal</a>
+            <a href="#install" onclick="toggleMenu()" class="menu-link text-4xl font-bold tracking-tighter translate-y-12 opacity-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-crimson">Deploy</a>
+            <a href="#install" onclick="toggleMenu()" class="menu-link mt-4 translate-y-12 opacity-0 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]">
+                <div class="p-1.5 bg-gradient-to-b from-crimson/20 to-blood/20 rounded-full">
+                    <div class="px-8 py-4 bg-gradient-to-b from-crimson to-blood rounded-full flex items-center gap-3 active:scale-95 transition-transform">
+                        <span class="text-sm font-semibold">Execute</span>
+                        <div class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center">
+                            <span class="text-xs">→</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section: Shadow Strike -->
+    <section class="relative min-h-[100dvh] flex items-center justify-center px-4 py-32">
+        <!-- Animated kunai backdrop -->
+        <div class="absolute inset-0 overflow-hidden opacity-10">
+            <svg class="absolute top-20 right-20 w-32 h-32 text-crimson kunai-float" style="animation-delay: 0s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
+                <path d="M12 2l-2 8h4l-2-8zM10 10v12M14 10v12M6 16l4-2M18 16l-4-2"/>
+            </svg>
+            <svg class="absolute bottom-32 left-32 w-24 h-24 text-crimson/50 kunai-float" style="animation-delay: -7s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
+                <path d="M12 2l-2 8h4l-2-8zM10 10v12M14 10v12M6 16l4-2M18 16l-4-2"/>
+            </svg>
+        </div>
+        
+        <div class="relative max-w-6xl mx-auto text-center space-y-12 fade-in">
+            <!-- Eyebrow badge -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-crimson/10 border border-crimson/20 backdrop-blur-xl">
+                <div class="w-1.5 h-1.5 rounded-full bg-crimson animate-pulse"></div>
+                <span class="text-[10px] uppercase tracking-[0.2em] font-medium text-crimson">2026 Shadowforge Upgrade</span>
+            </div>
+            
+            <!-- Massive hero typography -->
+            <h1 class="text-7xl md:text-[10rem] font-bold tracking-tighter leading-[0.9] bg-gradient-to-b from-white via-white/90 to-white/30 bg-clip-text text-transparent">
+                Silent.<br/>Lethal.<br/>Upgraded.
+            </h1>
+            
+            <p class="text-lg md:text-2xl text-mist max-w-3xl mx-auto leading-relaxed font-light">
+                The GOD Agent strikes from the shadows with a <span class="text-white font-medium">zero-dependency core</span>, 
+                <span class="text-white font-medium">offline local inference</span>, and a 
+                <span class="text-white font-medium">self-verifying autonomous loop</span>. 
+                No noise. No waste. Pure precision.
+            </p>
+
+            <!-- CTA Grid -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-8">
+                <a href="#install" class="group relative">
+                    <div class="absolute inset-0 bg-crimson/30 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative p-1.5 bg-gradient-to-b from-crimson/20 to-blood/20 rounded-full">
+                        <div class="px-8 py-4 bg-gradient-to-b from-crimson to-blood rounded-[calc(9999px-0.375rem)] flex items-center gap-3 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-95">
+                            <span class="text-sm font-semibold">Begin Infiltration</span>
+                            <div class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center transition-all duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-110">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#features" class="group px-8 py-4 rounded-full border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 backdrop-blur-xl transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-95">
+                    <span class="text-sm font-medium text-mist group-hover:text-white transition-colors">View Arsenal</span>
+                </a>
+            </div>
+            
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+                <span class="text-xs text-smoke uppercase tracking-widest">Scroll to Strike</span>
+                <svg class="w-5 h-5 text-smoke" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section: Combat Metrics -->
+    <section class="relative px-4 py-32">
+        <div class="max-w-7xl mx-auto">
+            <!-- Z-Axis cascade cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1: Speed -->
+                <div class="fade-in relative group" style="transition-delay: 0.1s;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-crimson/10 to-transparent rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative p-1.5 bg-gradient-to-b from-white/5 to-white/[0.02] rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-b from-obsidian to-vanta rounded-[calc(2rem-0.375rem)] space-y-6">
+                            <svg class="w-12 h-12 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                            </svg>
+                            <div>
+                                <div class="text-4xl font-bold tracking-tighter bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent">Zero-dependency core</div>
+                                <div class="text-sm text-mist mt-2 font-light">No third-party runtime deps. Python 3.11+ and nothing else to trust.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 2: Cost -->
+                <div class="fade-in relative group" style="transition-delay: 0.2s;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-crimson/10 to-transparent rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative p-1.5 bg-gradient-to-b from-white/5 to-white/[0.02] rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-b from-obsidian to-vanta rounded-[calc(2rem-0.375rem)] space-y-6">
+                            <svg class="w-12 h-12 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            <div>
+                                <div class="text-4xl font-bold tracking-tighter bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent">Offline &amp; private</div>
+                                <div class="text-sm text-mist mt-2 font-light">Runs fully local via Ollama. No API key, no data leaves your machine.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Learning -->
+                <div class="fade-in relative group" style="transition-delay: 0.3s;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-crimson/10 to-transparent rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative p-1.5 bg-gradient-to-b from-white/5 to-white/[0.02] rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-b from-obsidian to-vanta rounded-[calc(2rem-0.375rem)] space-y-6">
+                            <svg class="w-12 h-12 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                            <div>
+                                <div class="text-4xl font-bold tracking-tighter bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent">Self-verifying</div>
+                                <div class="text-sm text-mist mt-2 font-light">Autonomous loop with checkpoints and auto-rollback. Every strike is verified.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Variants Section: Choose Your Path -->
+    <section id="variants" class="relative px-4 py-32">
+        <div class="max-w-7xl mx-auto space-y-16">
+            <div class="text-center space-y-4 fade-in">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/5 backdrop-blur-xl">
+                    <span class="text-[10px] uppercase tracking-[0.2em] font-medium text-smoke">Three Paths</span>
+                </div>
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
+                    Choose Your Blade
+                </h2>
+            </div>
+
+            <!-- Asymmetrical Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 fade-in" style="transition-delay: 0.2s;">
+                <!-- Free Variant (Large) -->
+                <div class="md:col-span-8 md:row-span-2 relative group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-crimson/20 to-transparent rounded-[2rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+                    <div class="relative p-2 bg-gradient-to-b from-white/10 to-white/5 rounded-[2rem] border border-white/10">
+                        <div class="p-10 bg-gradient-to-br from-obsidian via-steel to-vanta rounded-[calc(2rem-0.5rem)] space-y-8 min-h-[400px] flex flex-col justify-between">
+                            <div class="space-y-6">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-crimson/20 border border-crimson/30 mb-4">
+                                            <span class="text-[9px] uppercase tracking-widest font-semibold text-crimson">Recommended</span>
+                                        </div>
+                                        <h3 class="text-4xl font-bold tracking-tight mb-2">Shadow Operative</h3>
+                                        <p class="text-crimson text-xl font-medium">Local Variant // Ollama, no API key</p>
+                                    </div>
+                                    <svg class="w-16 h-16 text-crimson/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                        <path d="M12 2l-2 8h4l-2-8zM10 10v12M14 10v12M6 16l4-2M18 16l-4-2"/>
+                                    </svg>
+                                </div>
+                                
+                                <div class="space-y-3 text-mist">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-5 h-5 rounded-full bg-crimson/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <svg class="w-3 h-3 text-crimson" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm">100% local inference via the Ollama preset. Default model: llama3.2, no API key required.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-5 h-5 rounded-full bg-crimson/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <svg class="w-3 h-3 text-crimson" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm">No API costs. Complete privacy. Works fully offline.</span>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-5 h-5 rounded-full bg-crimson/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <svg class="w-3 h-3 text-crimson" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm">Requires 16GB RAM (CPU) or 32GB + GPU for full power</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="group/btn w-full">
+                                <div class="p-1 bg-gradient-to-b from-crimson/30 to-blood/30 rounded-full">
+                                    <div class="px-6 py-3 bg-gradient-to-b from-crimson to-blood rounded-[calc(9999px-0.25rem)] flex items-center justify-center gap-2 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-95">
+                                        <span class="text-sm font-semibold">Deploy Shadow Operative</span>
+                                        <div class="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center transition-all duration-700 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 group-hover/btn:scale-110">
+                                            <span class="text-xs">→</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hybrid Variant (Stacked) -->
+                <div class="md:col-span-4 relative group">
+                    <div class="relative p-1.5 bg-gradient-to-b from-white/5 to-white/[0.02] rounded-[2rem] border border-white/5">
+                        <div class="p-6 bg-gradient-to-b from-obsidian to-vanta rounded-[calc(2rem-0.375rem)] space-y-6">
+                            <div class="space-y-3">
+                                <h3 class="text-2xl font-bold tracking-tight">Hybrid Strike</h3>
+                                <p class="text-crimson font-medium">Local + hosted</p>
+                                <p class="text-sm text-mist">Keep local by default, route to a hosted provider when you want. Cost-aware routing picks fast vs powerful per task.</p>
+                            </div>
+                            <button class="w-full px-4 py-2.5 rounded-full border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-sm font-medium transition-all duration-700 active:scale-95">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enterprise Variant (Stacked) -->
+                <div class="md:col-span-4 relative group">
+                    <div class="relative p-1.5 bg-gradient-to-b from-white/5 to-white/[0.02] rounded-[2rem] border border-white/5">
+                        <div class="p-6 bg-gradient-to-b from-obsidian to-vanta rounded-[calc(2rem-0.375rem)] space-y-6">
+                            <div class="space-y-3">
+                                <h3 class="text-2xl font-bold tracking-tight">Full Arsenal</h3>
+                                <p class="text-white/60 font-medium">Hosted providers</p>
+                                <p class="text-sm text-mist">Bring your own key for OpenAI, Groq, OpenRouter, DeepSeek, Anthropic or Gemini. Maximum quality on demand.</p>
+                            </div>
+                            <button class="w-full px-4 py-2.5 rounded-full border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-sm font-medium transition-all duration-700 active:scale-95">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section: Weapons Arsenal -->
+    <section id="features" class="relative px-4 py-32">
+        <div class="max-w-7xl mx-auto space-y-16">
+            <div class="text-center space-y-4 fade-in">
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
+                    Upgraded Arsenal
+                </h2>
+                <p class="text-lg text-mist max-w-2xl mx-auto">Six lethal capabilities. Zero compromise.</p>
+            </div>
+            
+            <!-- Feature Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Feature 1 -->
+                <div class="fade-in relative group" style="transition-delay: 0.1s;">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)] space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-crimson/10 border border-crimson/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Autonomous Self-Verifying Loop</h3>
+                            <p class="text-mist text-sm leading-relaxed">Runs tasks end to end with self-verification, a completion signal, and a circuit-breaker to stop runaways. Safety boundaries keep every action in-bounds.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="fade-in relative group" style="transition-delay: 0.15s;">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)] space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-crimson/10 border border-crimson/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 16v-4M12 8h.01"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Skill Memory <span class="text-crimson text-sm align-middle">NEW</span></h3>
+                            <p class="text-mist text-sm leading-relaxed">Learns from verified successes, storing reusable proven approaches and injecting them back into future prompts. Deterministic and fully offline.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="fade-in relative group" style="transition-delay: 0.2s;">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)] space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-crimson/10 border border-crimson/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Broad Provider Support</h3>
+                            <p class="text-mist text-sm leading-relaxed">Presets for local Ollama (default, no key) plus hosted OpenAI, Groq, OpenRouter, DeepSeek, Anthropic and Gemini. Local-first, offline-capable.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="fade-in relative group" style="transition-delay: 0.25s;">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)] space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-crimson/10 border border-crimson/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Cost-Aware Routing</h3>
+                            <p class="text-mist text-sm leading-relaxed">Routes by task complexity: a fast model for simple work, a powerful model when it counts. You control the trade-off.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="fade-in relative group" style="transition-delay: 0.3s;">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)] space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-crimson/10 border border-crimson/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2v20M2 12h20"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Lessons From Failures</h3>
+                            <p class="text-mist text-sm leading-relaxed">Records what went wrong in an episodic log and recalls those lessons later, so the same mistake is not repeated. Persistent across sessions.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="fade-in relative group" style="transition-delay: 0.35s;">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-8 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)] space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-crimson/10 border border-crimson/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <path d="M9 3v18"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold">Convention Detection</h3>
+                            <p class="text-mist text-sm leading-relaxed">Infers your project's style and conventions from existing code, so generated changes match what's already there. Team knowledge shares via export/import bundle.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section: Deploy -->
+    <section id="install" class="relative px-4 py-32">
+        <div class="max-w-4xl mx-auto space-y-16">
+            <div class="text-center space-y-4 fade-in">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-crimson/10 border border-crimson/20 backdrop-blur-xl">
+                    <span class="text-[10px] uppercase tracking-[0.2em] font-medium text-crimson">Three Commands</span>
+                </div>
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tighter bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">
+                    Deploy in Shadows
+                </h2>
+            </div>
+            
+            <!-- Installation steps -->
+            <div class="space-y-6 fade-in" style="transition-delay: 0.2s;">
+                <!-- Step 1 -->
+                <div class="relative group">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-6 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)]">
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-crimson/20 border border-crimson/30 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-xs font-bold text-crimson">1</span>
+                                </div>
+                                <div class="flex-1 space-y-3">
+                                    <h3 class="text-xl font-bold">Install Ollama</h3>
+                                    <div class="p-4 bg-black/40 rounded-xl border border-white/5 font-mono text-sm text-mist">
+                                        <code>winget install Ollama.Ollama</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="relative group">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-6 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)]">
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-crimson/20 border border-crimson/30 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-xs font-bold text-crimson">2</span>
+                                </div>
+                                <div class="flex-1 space-y-3">
+                                    <h3 class="text-xl font-bold">Pull the Local Model</h3>
+                                    <div class="space-y-2">
+                                        <div class="p-4 bg-black/40 rounded-xl border border-white/5 font-mono text-sm text-mist">
+                                            <code>ollama pull llama3.2</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative group">
+                    <div class="p-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2rem] border border-white/5">
+                        <div class="p-6 bg-gradient-to-br from-obsidian to-vanta rounded-[calc(2rem-0.5rem)]">
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-crimson/20 border border-crimson/30 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-xs font-bold text-crimson">3</span>
+                                </div>
+                                <div class="flex-1 space-y-3">
+                                    <h3 class="text-xl font-bold">Configure &amp; Execute</h3>
+                                    <p class="text-sm text-mist">Set the local provider in <code class="text-crimson">god_agent.toml</code>:</p>
+                                    <div class="p-4 bg-black/40 rounded-xl border border-white/5 font-mono text-xs text-mist leading-relaxed overflow-x-auto">
+                                        <code>llm_provider = "ollama"<br/>
+llm_model = "llama3.2"</code>
+                                    </div>
+                                    <p class="text-sm text-mist">Then launch the self-verifying loop:</p>
+                                    <div class="p-4 bg-black/40 rounded-xl border border-white/5 font-mono text-xs text-mist leading-relaxed overflow-x-auto">
+                                        <code>py -m god_agent.cli loop "self-check" \<br/>
+&nbsp;&nbsp;--command "py -m pytest"</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="text-center pt-8 fade-in" style="transition-delay: 0.4s;">
+                <a href="../QUICKSTART_FREE_VARIANT.md" class="group inline-block">
+                    <div class="p-1.5 bg-gradient-to-b from-crimson/20 to-blood/20 rounded-full">
+                        <div class="px-8 py-4 bg-gradient-to-b from-crimson to-blood rounded-[calc(9999px-0.375rem)] flex items-center gap-3 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-95">
+                            <span class="text-sm font-semibold">Full Installation Guide</span>
+                            <div class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center transition-all duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-110">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative px-4 py-24 border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-6 h-6 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        <span class="text-lg font-bold">GOD Agent</span>
+                    </div>
+                    <p class="text-sm text-mist leading-relaxed">
+                        Silent. Lethal. Upgraded.<br/>
+                        The 2026 shadow release.
+                    </p>
+                </div>
+                
+                <!-- Docs -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-smoke">Documentation</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../UPGRADE_2026_SUMMARY.md" class="text-mist hover:text-white transition-colors">Summary</a></li>
+                        <li><a href="../VARIANT_COMPARISON.md" class="text-mist hover:text-white transition-colors">Variants</a></li>
+                        <li><a href="../QUICKSTART_FREE_VARIANT.md" class="text-mist hover:text-white transition-colors">Quick Start</a></li>
+                        <li><a href="../UPGRADE_2026_SPEC.md" class="text-mist hover:text-white transition-colors">Full Spec</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Resources -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-smoke">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://ollama.com" class="text-mist hover:text-white transition-colors">Ollama</a></li>
+                        <li><a href="skills.md" class="text-mist hover:text-white transition-colors">Skill Memory</a></li>
+                        <li><a href="README.md" class="text-mist hover:text-white transition-colors">Docs Index</a></li>
+                        <li><a href="../UPGRADE_TASKS.md" class="text-mist hover:text-white transition-colors">Status</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Status -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-smoke">Status</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-crimson animate-pulse"></div>
+                            <span class="text-xs text-mist">Ready for Deployment</span>
+                        </div>
+                        <div class="text-xs text-smoke">
+                            Version 2026.07.05<br/>
+                            Shadowforge Release
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom bar -->
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-smoke">
+                <p>© 2026 GOD Agent. Engineered in the shadows.</p>
+                <p>Zero-dependency core. Offline by default. Self-verifying.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all fade-in elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+        
+        // Fluid hamburger morph + staggered menu reveal
+        let menuOpen = false;
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            const menu = document.getElementById('mobileMenu');
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const links = document.querySelectorAll('.menu-link');
+
+            if (menuOpen) {
+                // Morph hamburger to X
+                bar1.style.transform = 'translateY(3px) rotate(45deg)';
+                bar2.style.transform = 'translateY(-3px) rotate(-45deg)';
+                menu.classList.remove('opacity-0', 'pointer-events-none');
+                menu.classList.add('opacity-100');
+                document.body.style.overflow = 'hidden';
+                // Staggered reveal
+                links.forEach((link, i) => {
+                    setTimeout(() => {
+                        link.classList.remove('translate-y-12', 'opacity-0');
+                        link.classList.add('translate-y-0', 'opacity-100');
+                    }, 100 + i * 60);
+                });
+            } else {
+                bar1.style.transform = '';
+                bar2.style.transform = '';
+                menu.classList.add('opacity-0', 'pointer-events-none');
+                menu.classList.remove('opacity-100');
+                document.body.style.overflow = '';
+                links.forEach((link) => {
+                    link.classList.add('translate-y-12', 'opacity-0');
+                    link.classList.remove('translate-y-0', 'opacity-100');
+                });
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

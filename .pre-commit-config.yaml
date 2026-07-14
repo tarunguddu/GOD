@@ -1,0 +1,18 @@
+# Pre-commit hooks that run the GOD agent's own gates plus the test suite.
+# Install:  pip install pre-commit && pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: god-critique
+        name: GOD critique (secrets/vulns/stubs)
+        entry: god critique
+        language: system
+        types: [python]
+        require_serial: false
+
+      - id: god-tests
+        name: GOD test suite
+        entry: python -m pytest -q
+        language: system
+        pass_filenames: false
+        always_run: true

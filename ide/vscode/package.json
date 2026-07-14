@@ -1,0 +1,36 @@
+{
+  "name": "god-agent",
+  "displayName": "GOD Coding Agent",
+  "description": "Surface the GOD agent's deterministic critique and project-health analysis inside VS Code.",
+  "version": "0.1.0",
+  "publisher": "god-agent",
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Linters", "Other"],
+  "activationEvents": [
+    "onLanguage:python",
+    "onCommand:god.critiqueCurrentFile",
+    "onCommand:god.health"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "god.critiqueCurrentFile", "title": "GOD: Critique Current File" },
+      { "command": "god.health", "title": "GOD: Project Health" }
+    ],
+    "configuration": {
+      "title": "GOD Agent",
+      "properties": {
+        "god.command": {
+          "type": "string",
+          "default": "god",
+          "description": "Command used to invoke the GOD CLI (e.g. 'god' or 'py -m god_agent.cli')."
+        },
+        "god.critiqueOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run the critique automatically when a Python file is saved."
+        }
+      }
+    }
+  }
+}
