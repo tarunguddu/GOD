@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚔️ GOD Agent
+# ⚔️ GOD Agent (Generative Omniscient Developer)
 
 ### Silent. Precise. Self-verifying.
 
